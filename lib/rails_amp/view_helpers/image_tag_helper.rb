@@ -47,8 +47,8 @@ module RailsAmp
           source_for_fastimage = source
           unless source =~ ::ActionView::Helpers::AssetUrlHelper::URI_REGEXP
             # find_asset is a Sprockets method
-            asset_env = Rails.application.assets || ::Sprockets::Railtie.build_environment(Rails.application)
-            source_for_fastimage = asset_env.find_asset(source).try(:pathname).to_s.presence ||
+            asset_env = Rails.application.assets_manifest || ::Sprockets::Railtie.build_environment(Rails.application)
+            source_for_fastimage = asset_env.find_sources(source).first.try(:pathname).to_s.presence ||
                                                                   File.join(Rails.public_path, source)
           end
           FastImage.size(source_for_fastimage) || [300, 300]
